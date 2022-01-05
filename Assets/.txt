@@ -1,0 +1,15 @@
+trajectory.positionCount = trajectoryCount;
+
+            Vector3 grenadeVelocity = Vector3.Normalize(cam.transform.TransformDirection(new Vector3(0, 0, 0.2f))) * grenadeThrowPower; //수류탄 속도
+            Vector3 grenadePos = cam.transform.position; //궤적을 그리기 위한 투척물의 위치
+            for (int i = 0; i < trajectoryCount; i++) //35번의 예상 투척물 위치 파악 후 궤적 작성
+            {
+                Vector3 prevVelocity = grenadeVelocity; //이전 속도
+                Vector3 prevPos = grenadePos;
+                grenadeVelocity += Physics.gravity * (1/15f);
+                grenadePos += (prevVelocity + grenadeVelocity) * (1 / 15f) * 0.5f; //등가속도 거리공식(평행사변형 이용)
+
+                trajectory.SetPosition(i, grenadePos); //카메라 시선방향으로 카메라에서 조금 떨어져서 생성
+                
+            }
+            yield return new WaitForSeconds(0.015f);
